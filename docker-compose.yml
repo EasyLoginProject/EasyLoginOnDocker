@@ -1,0 +1,21 @@
+version: "3"
+services:
+  couchdb:
+    image: couchdb:1.7.1
+  api:
+    image: easylogin/easyloginserver:${TAG:-latest}
+    command: --database.name=easylogin --database.host=couchdb
+    environment:
+      - RESOURCES=/EasyLoginServer/Resources
+  admin:
+    image: easylogin/easyloginwebadmin:${TAG:-latest}
+  ldap:
+    image: easylogin/easyloginldap:${TAG:-latest}
+    environment:
+      - EASYLOGIN_BASE_URL="http://api:8080"
+    ports:
+      - "6389:389"
+  front:
+    build: .
+    ports:
+      - "6443:443"
